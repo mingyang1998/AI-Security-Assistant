@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}AISOC 控制台{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[AISEC]</span>
+      <span class="title">AI 安全运营中心 (AISOC)</span>
+    </div>
+    <nav class="nav">
+      <a href="/"        class="{% if page == 'home'    %}active{% endif %}">概览</a>
+      <a href="/agents"  class="{% if page == 'agents'  %}active{% endif %}">Agent</a>
+      <a href="/alerts"  class="{% if page == 'alerts'  %}active{% endif %}">告警</a>
+      <a href="/events"  class="{% if page == 'events'  %}active{% endif %}">事件</a>
+      <a href="/msp"     class="{% if page == 'msp'     %}active{% endif %}">MSP 报告</a>
+    </nav>
+    <div class="as-of" id="as-of">{% block asof %}{% endblock %}</div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    AISOC Demo · Plan V0.4 Sprint 4 · 端口 9000
+  </footer>
+</body>
+</html>

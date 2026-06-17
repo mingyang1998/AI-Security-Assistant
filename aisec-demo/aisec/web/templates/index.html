@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}概览 · AISOC{% endblock %}
+{% block content %}
+<h1>系统概览</h1>
+
+<div class="cards">
+  <a class="card" href="/agents">
+    <div class="card-label">Agent</div>
+    <div class="card-value">{{ summary.agents_total }}</div>
+    <div class="card-sub">
+      <span class="badge ok">在线 {{ summary.agents_online }}</span>
+      <span class="badge off">离线 {{ summary.agents_offline }}</span>
+    </div>
+  </a>
+  <a class="card" href="/alerts">
+    <div class="card-label">告警</div>
+    <div class="card-value">{{ summary.alerts_total }}</div>
+    <div class="card-sub">data/alerts/*.md</div>
+  </a>
+  <a class="card" href="/msp">
+    <div class="card-label">MSP 报告</div>
+    <div class="card-value">{{ summary.msp_total }}</div>
+    <div class="card-sub">
+      最新等级
+      {% if summary.msp_latest_level == 'safe' %}
+        <span class="badge ok">SAFE</span>
+      {% elif summary.msp_latest_level == 'suspicious' %}
+        <span class="badge warn">SUSPICIOUS</span>
+      {% elif summary.msp_latest_level == 'dangerous' %}
+        <span class="badge bad">DANGEROUS</span>
+      {% else %}
+        <span class="badge">n/a</span>
+      {% endif %}
+      / 评分 {{ summary.msp_latest_score }}
+    </div>
+  </a>
+  <a class="card" href="/events">
+    <div class="card-label">事件类型</div>
+    <div class="card-value">{{ summary.event_types | length }}</div>
+    <div class="card-sub">点击查看明细</div>
+  </a>
+</div>
+
+<h2>事件类型 Top 10</h2>
+{% if summary.event_types %}
+<table class="table">
+  <thead><tr><th>类型</th><th class="num">次数</th></tr></thead>
+  <tbody>
+  {% for et in summary.event_types %}
+    <tr>
+      <td><a href="/events?type={{ et.type }}">{{ et.type }}</a></td>
+      <td class="num">{{ et.count }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">暂无事件。运行 <code>python -m aisec start</code> 然后跑 demo 脚本。</p>
+{% endif %}
+{% endblock %}

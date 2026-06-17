@@ -1,0 +1,49 @@
+{
+  "policy_id": "default-iac-v1",
+  "version": "1.0.0",
+  "description": "默认 IAC 策略：白名单 + 网关拦截 + 动态零信任评分",
+  "rules": [
+    {
+      "id": "r001",
+      "name": "白名单 Agent 必检",
+      "effect": "deny",
+      "condition": {
+        "agent_in_whitelist": false
+      },
+      "action": {
+        "type": "block",
+        "log": true,
+        "alert": true,
+        "reason": "Agent 未在白名单中"
+      }
+    },
+    {
+      "id": "r002",
+      "name": "高风险 Agent 限流",
+      "effect": "allow",
+      "condition": {
+        "trust_score_lt": 30
+      },
+      "action": {
+        "type": "rate_limit",
+        "rate": "1/min",
+        "log": true,
+        "alert": true,
+        "reason": "信任分过低，降权限流"
+      }
+    },
+    {
+      "id": "r003",
+      "name": "敏感数据访问需 SOC 审批",
+      "effect": "allow",
+      "condition": {
+        "data_sensitivity_gte": "L3"
+      },
+      "action": {
+        "type": "soc_approval_required",
+        "log": true,
+        "reason": "高敏感数据访问需 SOC 确认"
+      }
+    }
+  ]
+}

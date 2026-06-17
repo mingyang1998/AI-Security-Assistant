@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}MSP 报告详情 · AISOC{% endblock %}
+{% block content %}
+{% set d = report.data %}
+<h1>MSP 报告：{{ d.started_at }}</h1>
+
+<div class="meta-grid">
+  <div><span class="muted">模型</span><br><code>{{ d.fingerprint.model }}</code></div>
+  <div><span class="muted">Provider</span><br>{{ d.fingerprint.provider }}</div>
+  <div><span class="muted">API 端点</span><br>{{ d.fingerprint.host }}</div>
+  <div><span class="muted">API Key 末位</span><br><code>{{ d.fingerprint.api_key_tail }}</code></div>
+  <div><span class="muted">指纹</span><br><code class="payload">{{ d.fingerprint.fingerprint[:24] }}…</code></div>
+  <div><span class="muted">Mock 模式</span><br>{{ d.fingerprint.mock_mode }}</div>
+  <div><span class="muted">总体评分</span><br>{{ d.overall_score }}/100</div>
+  <div><span class="muted">总体等级</span><br>
+    {% if d.overall_level == 'safe' %}<span class="badge ok">SAFE</span>
+    {% elif d.overall_level == 'suspicious' %}<span class="badge warn">SUSPICIOUS</span>
+    {% else %}<span class="badge bad">DANGEROUS</span>{% endif %}
+  </div>
+  <div><span class="muted">耗时</span><br>{{ "%.2f" | format(d.elapsed_sec) }} s</div>
+</div>
+
+<h2>Markdown 原文</h2>
+<pre class="md-block">{{ report.md }}</pre>
+
+<h2>JSON 原文</h2>
+<p><a href="/api/msp.json" class="link">查看 API</a> · <code>{{ report.json_path }}</code></p>
+{% endblock %}

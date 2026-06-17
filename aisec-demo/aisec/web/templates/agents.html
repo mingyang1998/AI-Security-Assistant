@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Agent · AISOC{% endblock %}
+{% block content %}
+<h1>Agent 列表</h1>
+<p class="muted">来源：<code>aisec/core/registry.py</code> (SQLite)</p>
+
+{% if agents %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>名称</th>
+      <th>类型</th>
+      <th>状态</th>
+      <th>信任分</th>
+      <th>最后心跳</th>
+      <th>注册时间</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for a in agents %}
+    <tr>
+      <td><code>{{ a.agent_id }}</code></td>
+      <td>{{ a.name }}</td>
+      <td>{{ a.agent_type }}</td>
+      <td>
+        {% if a.status == 'online' %}
+          <span class="badge ok">online</span>
+        {% elif a.status == 'offline' %}
+          <span class="badge off">offline</span>
+        {% else %}
+          <span class="badge">{{ a.status }}</span>
+        {% endif %}
+      </td>
+      <td class="num">{{ "%.1f" | format(a.trust_score or 0) }}</td>
+      <td>
+        {% if a.last_heartbeat %}
+          {{ a.last_heartbeat | int | datetimeformat }}
+        {% else %}
+          <span class="muted">-</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if a.registered_at %}
+          {{ a.registered_at | int | datetimeformat }}
+        {% else %}
+          <span class="muted">-</span>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">尚无注册 Agent。运行 <code>python -m aisec start</code> 启动 3 个常驻 Agent。</p>
+{% endif %}
+{% endblock %}

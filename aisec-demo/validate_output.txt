@@ -1,0 +1,24 @@
+==============================================================================
+需求-能力      功能点                    状态       证据
+------------------------------------------------------------------------------
+①SAD       rogue 拒绝               [OK  ]    exit=0 (0.7s)
+①SAD       异常出网 demo              [OK  ]    exit=0 (4.2s)
+事件流含 anomalous ①SAD                   [OK  ]    269 条 anomalous_egress_detected
+②MSP       注入检测                   [OK  ]    exit=0 (0.5s)
+②MSP       有害输出                   [OK  ]    exit=0 (0.5s)
+②MSP       模型指纹                   [OK  ]    exit=0 (0.6s)
+②MSP       全量扫描                   [OK  ]    exit=0 (42.4s)
+registry 4 字段 ③AIG                   [OK  ]    /registry/agents -> 5 agents
+白名单 ≥1     ④IAC                   [OK  ]    1 files
+黑名单 ≥1     ④IAC                   [OK  ]    1 files
+langchain agent 跑通 ④IAC                   [OK  ]    exit=0 (20.7s)
+sandbox.py ④IAC                   [OK  ]    
+⑤SMR       safe skill 扫描          [OK  ]    exit=0 (6.8s)
+⑤SMR       suspicious skill 扫描    [OK  ]    exit=0 (27.4s)
+MCP 扫描 CLI 跑通 ⑤SMR                   [OK  ]    exit=0 (1.0s)
+事件流 ≥ 1000 ⑥AT                    [OK  ]    1627 events in 3 files
+人读告警 ≥ 5   ⑥AT                    [OK  ]    34 files
+MSP 报告 ≥ 3 ⑥AT                    [OK  ]    17 files
+可复现 (fingerprint 替代 snapshot) ⑥AT                    [OK  ]    
+==============================================================================
+通过 19 / 失败 0 / 总计 19

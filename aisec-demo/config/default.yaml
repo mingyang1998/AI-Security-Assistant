@@ -1,0 +1,72 @@
+# AI 安全助手 Demo - 默认配置
+# 所有路径相对仓库根目录；首次运行会自动创建 data/ alerts/ reports/ 等目录
+
+project:
+  name: "aisec-demo"
+  version: "0.1.0"
+  root: "."                          # aisec-demo/ 根目录
+
+# LLM 配置（千问 OpenAI 兼容接口）
+# 优先从环境变量 DASHSCOPE_API_KEY 读取；为空时 LLM 调用走 mock 模式
+llm:
+  provider: "qwen"
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  api_key: "sk-770a9633accb4adea2880523e53d89ba"
+  model: "qwen3.7-max-preview"
+  timeout: 60
+  max_retries: 2
+
+# 三个 Agent 端口（V0.4 决策）
+agents:
+  soc_agent:
+    port: 8000
+    host: "127.0.0.1"
+  probe_agent:
+    port: 8001
+    host: "127.0.0.1"
+  gateway_agent:
+    port: 8002
+    host: "127.0.0.1"
+
+# 心跳
+heartbeat:
+  interval_sec: 5
+  timeout_sec: 15                   # 超过此值未心跳 -> offline
+
+# A2A-Lite
+a2a:
+  default_deadline_ms: 100
+  max_retries: 1
+  log_to_events: true               # A2A 消息也写入 JSONL 事件流
+
+# 沙箱
+sandbox:
+  cpu_sec: 5
+  mem_mb: 256
+  temp_dir: "data/sandbox"
+
+# SMR (Sprint 1)
+smr:
+  static_weight: 0.30
+  semantic_weight: 0.30
+  behavior_weight: 0.40
+  thresholds:
+    safe: 30
+    suspicious: 60
+    # 0-30: 白名单; 30-60: 灰名单; 60+: 黑名单
+
+# 告警
+alerts:
+  dir: "alerts"
+  format: "markdown"
+
+# 审计
+audit:
+  events_dir: "data/events"
+  db_path: "data/aisec.db"
+
+# 策略（demo：内置白名单）
+whitelist:
+  builtin_skills:
+    - "examples/safe_skill.py"
+  builtin_mcps: []

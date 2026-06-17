@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}MSP 报告 · AISOC{% endblock %}
+{% block content %}
+<h1>MSP 报告</h1>
+<p class="muted">来源：<code>data/msp/*.json</code></p>
+
+{% if reports %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>开始时间</th>
+      <th>模型</th>
+      <th>等级</th>
+      <th>评分</th>
+      <th>JSON</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in reports %}
+    <tr>
+      <td>{{ r.started_at }}</td>
+      <td>{{ r.model }}</td>
+      <td>
+        {% if r.overall == 'safe' %}
+          <span class="badge ok">SAFE</span>
+        {% elif r.overall == 'suspicious' %}
+          <span class="badge warn">SUSPICIOUS</span>
+        {% elif r.overall == 'dangerous' %}
+          <span class="badge bad">DANGEROUS</span>
+        {% else %}
+          <span class="badge">{{ r.overall }}</span>
+        {% endif %}
+      </td>
+      <td class="num">{{ r.score }}</td>
+      <td><a href="/msp/{{ r.name }}" class="link">详情</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">暂无报告。运行 <code>python -m aisec scan-model</code> 或 <code>python examples\demo_msp_full_scan.py</code>。</p>
+{% endif %}
+{% endblock %}

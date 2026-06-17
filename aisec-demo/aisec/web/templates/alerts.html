@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}告警 · AISOC{% endblock %}
+{% block content %}
+<h1>告警列表</h1>
+<p class="muted">来源：<code>data/alerts/*.md</code>（MSP 扫描 + Skill/MCP 审查产物）</p>
+
+{% if alerts %}
+<table class="table">
+  <thead>
+    <tr><th>文件名</th><th>大小</th><th>修改时间</th><th>操作</th></tr>
+  </thead>
+  <tbody>
+  {% for a in alerts %}
+    <tr>
+      <td><code>{{ a.name }}</code></td>
+      <td class="num">{{ a.size }} B</td>
+      <td>{{ a.mtime }}</td>
+      <td>
+        <a href="/msp/{{ a.name | replace('.md', '') }}" class="link">查看</a>
+        <span class="muted"> · {{ a.path }}</span>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">暂无告警。运行 <code>python -m aisec scan-model</code> 生成 MSP 告警。</p>
+{% endif %}
+{% endblock %}
