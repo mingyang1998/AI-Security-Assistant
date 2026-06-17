@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field
 class LLMConfig(BaseModel):
     provider: str = "qwen"
     base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    api_key: str = "sk-770a9633accb4adea2880523e53d89ba"
+    api_key: str = ""
     model: str = "qwen3.6-max-preview"
     timeout: int = 30
     max_retries: int = 2
